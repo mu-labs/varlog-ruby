@@ -1,4 +1,6 @@
 require 'request_store'
+require 'benchmark'
+require 'net/http'
 
 module Net
   class HTTP
@@ -9,13 +11,13 @@ module Net
       timestamp = Time.now.to_i
       endpoint = req.path
 
-      request_event = new Varlog::HTTPRequestEvent(trace_id, timestamp, req.method, endpoint)
-      Collector.collect(request_event)
-      rtt = Bechmark.realtime do
+      request_event = Varlog::HTTPRequestEvent.new(trace_id, timestamp, req.method, endpoint)
+      Varlog::Collector.collect(request_event)
+      rtt = Benchmark.realtime do
         @response = orig_request(req, body)
       end
-      response_event = new Varlog::HTTPResponseEvent(trace_id, timestamp, res.code, endpoint, rtt)
-      Collector.collect(response_event)
+      response_event = Varlog::HTTPResponseEvent.new(trace_id, timestamp, @response.code, endpoint, rtt)
+      Varlog::Collector.collect(response_event)
 
       @response
     end

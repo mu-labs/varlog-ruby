@@ -1,3 +1,5 @@
 require 'varlog/middleware'
+require 'varlog/events'
 require 'varlog/interceptor'
+require 'varlog/collector'
 require 'varlog/version'
