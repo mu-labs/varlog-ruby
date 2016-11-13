@@ -19,6 +19,7 @@ module Varlog
       @id = SecureRandom.uuid()
       @parent_id = parent_id
       @timestamp = timestamp
+      @status = status
       @endpoint = endpoint
       @rtt = rtt
       @schema = "HTTPResponse"
