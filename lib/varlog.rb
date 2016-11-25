@@ -1,3 +1,4 @@
+require 'varlog/request_store'
 require 'varlog/span'
 require 'varlog/middleware'
 require 'varlog/events'

@@ -1,23 +1,25 @@
-require 'request_store'
-require 'request_store'
 require 'securerandom'
 
 module Varlog
   class Span
     def self.current
       {
-          trace_id: RequestStore[:trace_id],
-          span_id: RequestStore[:span_id],
-          parent_id: RequestStore[:parent_span_id]
+          trace_id: store[:trace_id],
+          span_id: store[:span_id],
+          parent_id: store[:parent_span_id]
       }
     end
 
+    def self.store
+      RequestStore
+    end
+
     def self.method_missing(m)
-      RequestStore[m.to_sym]
+      store[m.to_sym]
     end
 
     def self.build(trace_id, parent_span_id)
-      RequestStore.begin!
+      RequestStore.store
 
       current_span_id = SecureRandom.uuid
       trace_id = trace_id.nil? ? SecureRandom.uuid : trace_id
@@ -29,7 +31,6 @@ module Varlog
     end
 
     def self.end
-      RequestStore.end!
       RequestStore.clear!
     end
   end

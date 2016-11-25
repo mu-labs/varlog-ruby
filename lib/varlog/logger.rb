@@ -1,4 +1,3 @@
-require 'request_store'
 require 'logger'
 require 'json'
 
