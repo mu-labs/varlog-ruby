@@ -7,17 +7,19 @@ module Net
     alias_method :orig_request, :request
 
     def request(req, body = nil)
-      trace_id = RequestStore[:trace_id]
       timestamp = Time.now.to_i
       endpoint = req.path
+      req.add_field('X-Trace-Id', Varlog::Span.trace_id)
+      req.add_field('X-Parent-Id', Varlog::Span.span_id)
 
-      request_event = Varlog::HTTPRequestEvent.new(trace_id, timestamp, req.method, endpoint)
-      Varlog::Collector.collect(request_event)
+      current_span = Varlog::Span.current
+      request_event = Varlog::HTTPRequestEvent.new(current_span, timestamp, req.method, endpoint)
+      Varlog::Collector.instance.collect(request_event)
       rtt = Benchmark.realtime do
         @response = orig_request(req, body)
       end
-      response_event = Varlog::HTTPResponseEvent.new(trace_id, timestamp, @response.code, endpoint, rtt)
-      Varlog::Collector.collect(response_event)
+      response_event = Varlog::HTTPResponseEvent.new(current_span, timestamp, @response.code, endpoint, rtt)
+      Varlog::Collector.instance.collect(response_event)
 
       @response
     end

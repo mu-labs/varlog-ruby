@@ -3,37 +3,66 @@ require 'securerandom'
 module Varlog
   class HTTPRequestEvent
 
-    def initialize(parent_id, timestamp, method, endpoint)
-      @id = SecureRandom.uuid()
-      @parent_id = parent_id
+    def initialize(span, timestamp, method, endpoint)
+      @span = span
       @timestamp = timestamp
+      @method = method
       @endpoint = endpoint
-      @schema = "HTTPRequest"
+      @schema = 'HTTPRequest'
+    end
+
+    def to_h
+      {
+          timestamp: @timestamp,
+          method: @method,
+          endpoint: @endpoint,
+          schema: @schema
+      }.merge(@span)
     end
 
   end
 
   class HTTPResponseEvent
 
-    def initialize(parent_id, timestamp, status, endpoint, rtt)
-      @id = SecureRandom.uuid()
-      @parent_id = parent_id
+    def initialize(span, timestamp, status, endpoint, rtt)
+      @span = span
       @timestamp = timestamp
       @status = status
       @endpoint = endpoint
       @rtt = rtt
-      @schema = "HTTPResponse"
+      @schema = 'HTTPResponse'
+    end
+
+    def to_h
+      {
+          timestamp: @timestamp,
+          status: @status,
+          method: @method,
+          endpoint: @endpoint,
+          rtt: @rtt,
+          schema: @schema
+      }.merge(@span)
     end
 
   end
 
-  class MessageEvent
+  class LogEvent
 
-    def initialize(parent_id, timestamp, message)
-      @id = SecureRandom.uuid()
+    def initialize(span, timestamp, log, severity)
+      @span = span
       @timestamp = timestamp
-      @message = message
-      @schema = "Message"
+      @severity = severity
+      @message = log
+      @schema = 'Log'
+    end
+
+    def to_h
+        {
+            timestamp: @timestamp,
+            severity: @severity,
+            message: @message,
+            schema: @schema
+        }.merge(@span)
     end
 
   end
