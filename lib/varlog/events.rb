@@ -1,6 +1,7 @@
 require 'securerandom'
 
 module Varlog
+
   class HTTPRequestEvent
 
     def initialize(span, timestamp, method, endpoint)

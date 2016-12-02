@@ -13,7 +13,6 @@ module Varlog
 
     def collect(event)
       json = event.to_h.to_json
-      p json
       begin
         @socket.send(json, 0)
       rescue => e
