@@ -2,6 +2,9 @@ require 'sinatra'
 require 'net/http'
 require 'varlog'
 
+
+Varlog.app_name = "example"
+
 configure do
   use Varlog::Middleware
 end

@@ -6,3 +6,9 @@ require 'varlog/interceptor'
 require 'varlog/collector'
 require 'varlog/logger'
 require 'varlog/version'
+
+module Varlog
+  class << self
+    attr_accessor :app_name
+  end
+end

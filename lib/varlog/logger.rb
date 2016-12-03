@@ -25,7 +25,7 @@ module Varlog
 
     def formatter
       proc do |severity, _, _, msg|
-        event = Varlog::LogEvent.new(Span.current, Time.now.to_i, msg, severity)
+        event = Varlog::LogEvent.new(Span.current, Time.now.to_f, msg, severity)
         event
       end
     end

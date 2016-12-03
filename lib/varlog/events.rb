@@ -38,7 +38,6 @@ module Varlog
       {
           timestamp: @timestamp,
           status: @status,
-          method: @method,
           endpoint: @endpoint,
           rtt: @rtt,
           schema: @schema
