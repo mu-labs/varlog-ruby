@@ -8,7 +8,9 @@ module Varlog
 
     def initialize
       @socket = UDPSocket.new
-      @socket.connect('localhost', 8015)
+      host = ENV['VARLOG_PORT_8015_UDP_ADDR']
+      port = ENV['VARLOG_PORT_8015_UDP_PORT']
+      @socket.connect(host || 'localhost', port || 8015)
     end
 
     def collect(event)
